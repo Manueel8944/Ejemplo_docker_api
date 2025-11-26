@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  backend:
+    image: ejemplo-api:v1.0
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://localhost:27017/GestionUG
+    depends_on:
+      - db
+
+  db: 
+    image: mongo
+    ports:
+      -"27017:27017"
+    volumes:
+      - mongo_data:/data/db
+  
+volumes: 
+  mongo_data:
