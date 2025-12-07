@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.10.16)  7 DEC 2025 23:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.10.16)  7 DEC 2025 23:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -348,12 +348,12 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 [2]
 
 [3]
-<carpetas.png, id=157, 217.5628pt x 37.64063pt>
+<carpetas.png, id=165, 217.5628pt x 37.64063pt>
 File: carpetas.png Graphic file (type png)
 <use carpetas.png>
 Package pdftex.def Info: carpetas.png  used on input line 222.
 (pdftex.def)             Requested size: 221.78923pt x 38.37453pt.
-<secrets.png, id=159, 1443.14156pt x 435.12563pt>
+<secrets.png, id=167, 1443.14156pt x 435.12563pt>
 File: secrets.png Graphic file (type png)
 <use secrets.png>
 Package pdftex.def Info: secrets.png  used on input line 272.
@@ -361,14 +361,19 @@ Package pdftex.def Info: secrets.png  used on input line 272.
 
 
 [4 <./carpetas.png>]
-<secretsTodos.png, id=202, 587.94656pt x 190.46156pt>
+<secretsTodos.png, id=210, 587.94656pt x 190.46156pt>
 File: secretsTodos.png Graphic file (type png)
 <use secretsTodos.png>
 Package pdftex.def Info: secretsTodos.png  used on input line 277.
 (pdftex.def)             Requested size: 443.57848pt x 143.69441pt.
+<push.png, id=211, 484.81125pt x 85.82062pt>
+File: push.png Graphic file (type png)
+<use push.png>
+Package pdftex.def Info: push.png  used on input line 284.
+(pdftex.def)             Requested size: 443.57848pt x 78.52507pt.
 
 
-[5 <./secrets.png> <./secretsTodos.png>] (index.aux
+[5 <./secrets.png> <./secretsTodos.png> <./push.png>] (index.aux
 LaTeX Info: Redefining \. on input line 11.
 LaTeX Info: Redefining \% on input line 11.
 )
@@ -377,20 +382,20 @@ LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-09-02>
  ***********
 Package rerunfilecheck Info: File `index.out' has not changed.
-(rerunfilecheck)             Checksum: 13F91CDC63F65BA94773E53A599AEF5F;2340.
+(rerunfilecheck)             Checksum: 2D294AC382EE4A3ACDCA9A4540E66D7A;2588.
  ) 
 Here is how much of TeX's memory you used:
- 12677 strings out of 468081
- 196427 string characters out of 5425788
- 808235 words of memory out of 5000000
- 41100 multiletter control sequences out of 15000+600000
+ 12696 strings out of 468081
+ 196700 string characters out of 5425788
+ 808230 words of memory out of 5000000
+ 41109 multiletter control sequences out of 15000+600000
  632301 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,7n,79p,388b,1206s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\manue\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tctt0800.pk><C:/Users/manue/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/manue/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/manue/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/manue/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/manue/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/manue/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on index.pdf (5 pages, 170095 bytes).
+Output written on index.pdf (5 pages, 182455 bytes).
 PDF statistics:
- 267 PDF objects out of 1000 (max. 8388607)
- 129 named destinations out of 1000 (max. 500000)
- 144 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 287 PDF objects out of 1000 (max. 8388607)
+ 139 named destinations out of 1000 (max. 500000)
+ 165 words of extra memory for PDF output out of 10000 (max. 10000000)
 

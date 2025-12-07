@@ -276,5 +276,27 @@ Asi es como quedan todos los secrets:
     \centering
     \includegraphics[width=1\textwidth]{secretsTodos.png}
 \end{figure}
-a
+
+\subsection{Hacer commit}
+Ahora hacemos el commit para que funcione la subida de imagen, aquí vemos como ha funcionado
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{push.png}
+\end{figure}
+
+\section{Mensaje telegram}
+Ahora vamos a añadirle que envie un mensaje por telegram cada vez que hagamos un se suba la imagen, para ello hay que crear un bot de telegram con el BotFather y cojer el token y el chatID y lo guardamos en secrets
+
+\begin{figure}[H] Ahora le añadimos esto a nuestro yml
+\begin{lstlisting}
+- name: Notificar por Telegram
+        if: success()  
+        run: |
+          MESSAGE="Nueva imagen subida a Docker Hub\nRepo: ${{ github.repository }}\nCommit: ${{ github.sha }}\nImagen: ${{ secrets.DOCKER_IMAGE_NAME }}:latest"
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d text="$MESSAGE"
+\end{lstlisting}
+\end{figure}
+
 \end{document}
