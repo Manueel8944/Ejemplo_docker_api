@@ -33,7 +33,7 @@
 
 \section{Introduction}
 
-En este documento se va a documentar la dockerizacion de una API de gestion de usuarios y grupos y su subida a docker hub.
+En este documento se va a documentar la dockerizacion de una API de gestion de usuarios y grupos y su subida a docker hub y su automatización con actions de github.
 
 \section{Tecnologías utilizadas}
 
@@ -44,6 +44,7 @@ En este documento se va a documentar la dockerizacion de una API de gestion de u
     \item Moongose: Es un paquete para la conexion entre el backend y la base de datos
     \item Coors: Para la seguridad de las peticiones HTTP
     \item Docker: La plataforma con la que vamos a trabajar para subir la API
+    \item Workflow: Para las actions de github
     
 \end{itemize}
 
@@ -297,6 +298,13 @@ Ahora vamos a añadirle que envie un mensaje por telegram cada vez que hagamos u
             -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
             -d text="$MESSAGE"
 \end{lstlisting}
+\end{figure}
+
+Vemos como funciona aunque los saltos de línea no era con /n
+
+\begin{figure}[H] 
+    \centering
+    \includegraphics[width=1\textwidth]{bot.png}
 \end{figure}
 
 \end{document}
