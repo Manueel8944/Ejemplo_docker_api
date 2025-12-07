@@ -1,0 +1,280 @@
+\documentclass{article}
+
+\usepackage[spanish]{babel}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{graphics}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+
+\definecolor{codegray}{gray}{0.95}
+
+\lstset{
+    backgroundcolor=\color{codegray},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    numbers=left,
+    numbersep=8pt,
+    frame=single,
+    framerule=0.5pt,
+    tabsize=2,
+    inputencoding=utf8,
+    extendedchars=true,
+    literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1
+}
+
+\title{Arquitectura Aplicacion Movil}
+\author{Manuel Añel García}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+En este documento se va a documentar la dockerizacion de una API de gestion de usuarios y grupos y su subida a docker hub.
+
+\section{Tecnologías utilizadas}
+
+\begin{itemize}
+
+    \item NodeJS con Express: Para el backend de la aplicación (Servidor)
+    \item Mongo: Para la base de datos
+    \item Moongose: Es un paquete para la conexion entre el backend y la base de datos
+    \item Coors: Para la seguridad de las peticiones HTTP
+    \item Docker: La plataforma con la que vamos a trabajar para subir la API
+    
+\end{itemize}
+
+\section{Arquitectura de la aplicacion}
+
+Arquitectura Backend (API REST) en contenedores
+\begin{itemize}
+
+    \item Servidor (Node.js): Maneja las rutas, realiza operaciones en la base de datos.
+    \item Base de datos (MongoDB): Almacena los datos de los usuarios y grupos.
+    
+\end{itemize}
+
+\section{Backend}
+Ahora se va a explicar el funcionamiento de la API en cada caso
+
+\subsection{Conexion a Mongo}
+
+El backend se conecta mediante el paquete moongose en el backend haciendo un moongose.connect() y dentro de los parentesis la direccion del servidor que tenemos creado
+
+\begin{figure}[H]
+\begin{lstlisting}
+let direccion = direccion_mongo;
+
+mongoose.connect(direccion)
+.then(() => console.log('Conectado a la base de datos'))
+.catch(err => console.error('Error de conexion a la base de datos:', err));
+\end{lstlisting}
+\end{figure}
+
+\subsection{Servidor Express}
+
+En este caso se ve como se crea el servidor mediante express con app = express() y se crean los endpoints que son las peticiones que se van a hacer desde la aplicacion al servidor para que se ejecuten, luego para desplegarlo se usa app.listen(), esto es igual para los grupos
+
+\begin{itemize}
+
+    \item GET: Es para recojer todos los usuarios que hay en la base de datos
+    \item POST: Mediante el cuerpo de un usuarios (sus parametros: nombre, apellido etc..) se recoje y se guarda el usuario en la base de datos con esos parametros
+    \item PUT: Basicamente mediante un id (el de mongo por defecto) se busca el usuario y mediante un cuerpo como en el anterior que se especifica en la aplicacion de modifica el usuario ya existente
+    \item DELETE: Mediante un id pasado por la aplicacion se elimina el usuario con el que concuerda
+    
+\end{itemize}
+
+\begin{figure}[H]
+\begin{lstlisting}
+app.get('/usuarios', async (req, res) => {
+  const usuarios = await Usuario.find();
+  res.json(usuarios);
+});
+
+app.post('/usuarios', async (req, res) => {
+  const nueva = new Usuario(req.body);
+  await nueva.save();
+  res.json(nueva);
+});
+
+app.put('/usuarios/:id', async (req, res) => {
+  const actualizada = await Usuario.findOneAndUpdate({ id: Number(req.params.id) }, req.body, { new: true });
+  res.json(actualizada);
+});
+
+app.delete('/usuarios/:id', async (req, res) => {
+  await Usuario.findOneAndDelete({ id: Number(req.params.id) });
+});
+\end{lstlisting}
+\end{figure}
+
+\subsection{Variables de entorno}
+Para la seguridad de mi API creé variables de entorno que básicamente la informacion delicada esta en un archivo .env y en donde deberia estar tiene una variable definida en el .env y eso no se sube a docker y luego cuando lo inicies sin eso se puede poner los valores que quieras por consola
+
+\begin{figure}[H]Esto es lo que tenemos en el .env
+\begin{lstlisting}
+MONGO_URI='mongodb://localhost:27017/GestionUG'
+\end{lstlisting}
+\end{figure}
+
+\begin{figure}[H]
+\begin{lstlisting}
+require('dotenv').config();
+const direccion_mongo = process.env.MONGO_URI;
+\end{lstlisting}
+\end{figure}
+
+\section{Docker}
+Vamos ahora a explicar como dockerizar la API
+
+\subsection{Crear Dockerfile}
+Sirve para que siga los pasos para construir la imagen despues
+
+\begin{figure}[H]
+\begin{lstlisting}
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
+\end{lstlisting}
+\end{figure}
+
+\subsection{Crear la imagen}
+En la carpeta donde está el Dockerfile hay que ejecutar este comando
+
+\begin{figure}[H]
+\begin{lstlisting}
+docker build -t manu8944/api-docker:v1.0
+\end{lstlisting}
+\end{figure}
+
+\subsection{Subir la imagen a Dockerhub}
+Ponemos los siguientes comandos para subirla imagen que creamos antes a docker hub
+
+\begin{figure}[H]
+\begin{lstlisting}
+docker login
+docker push manu8944/api-docker:v1.0
+\end{lstlisting}
+\end{figure}
+
+
+\subsection{Docker compose}
+El docker compose es un archivo para crear el contenedor en nuestro dockerdesktop
+
+\begin{figure}[H]
+\begin{lstlisting}
+version: "3.9"
+services:
+  backend:
+    image: ejemplo-api:v1.0
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://localhost:27017/GestionUG
+    depends_on:
+      - db
+
+  db: 
+    image: mongo
+    ports:
+      -"27017:27017"
+    volumes:
+      - mongo_data:/data/db
+  
+volumes: 
+  mongo_data:
+\end{lstlisting}
+\end{figure}
+
+Lo que se menciona en el código son las imágenes para subir, los puertos usados, url de conexion a la bd etc.. 
+
+\subsection{Construir contenedor con DockerCompose}
+Es para crear el contenedor localmente
+
+\begin{figure}[H]
+\begin{lstlisting}
+docker compose up -d
+\end{lstlisting}
+\end{figure}
+
+\section{Automatizar subida}
+Ahora vamos a ver como se hace para que al hacer push en nuestro repositorio de github automáticamente se haga un push de la imagen en docker hub
+
+\subsection{Crear archivo}
+
+Creamos esta estructura de carpetas con el archivo
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{carpetas.png}
+\end{figure}
+
+Ponemos esto para que se haga el push a DH cuando se haga un commit
+
+\begin{figure}[H]
+\begin{lstlisting}
+name: auto-build-push
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login a Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Construir y subir imagen Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_IMAGE_NAME }}:latest
+\end{lstlisting}
+\end{figure}
+
+\subsection{Secrets de github}
+Ahora en el repositorio hay que poner los secrets que son básicamente las variables de entorno que vimos en el código anterior.
+
+Asi se hacen los secrets:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{secrets.png}
+\end{figure}
+Asi es como quedan todos los secrets:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{secretsTodos.png}
+\end{figure}
+
+\end{document}
