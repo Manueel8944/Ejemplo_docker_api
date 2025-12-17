@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-let direccion = 'mongodb://host.docker.internal:27017/GestionUG';
+let direccion = 'mongodb://root:xEX6qzb2JAftYp75JZiiJcgjSKDYDuE7h77UqyQ5XC2y2fKFMN73DVTVKowUrMkc@o4cgkk044ck0w8okgkwcskww:27017/?directConnection=true';
 
 mongoose.connect(direccion)
 .then(() => console.log('Conectado a la base de datos'))
